@@ -13,7 +13,7 @@ namespace SeaBattle_2023
         static int _iteration = 0;
         static List<Ship> ships = new List<Ship>();
         static Random random = new Random();
-        static List<int> numOfThisDecksShips = new List<int>() { 3, 2, 1 };
+        static List<int> numOfThisDecksShips = new List<int>() { 4, 3, 2, 1 }; // Сначала -- однопалубные и на уменьшение. Количество кораблей данного типа.
 
         internal static void GameCycle(out char[,] computersField, out char[,] playersField)
         {
@@ -21,7 +21,7 @@ namespace SeaBattle_2023
             {
                 FillField(_playersField);
                 FillField(_computersField);
-                SpawnShips(_playersField, ships);
+                SpawnShips(_playersField, ships, numOfThisDecksShips);
             }
 
             if (_iteration > 0)
@@ -47,7 +47,7 @@ namespace SeaBattle_2023
             }
         }
 
-        private static void SpawnShips(char[,] field, List<Ship> ships)
+        private static void OldSpawnShips(char[,] field, List<Ship> ships)
         {
             //for (int i = 0; i < 4; i++) // Спавн однопалубных кораблей.
             //{
@@ -134,7 +134,7 @@ namespace SeaBattle_2023
             //}
 
             //SpawnThreedecks(field, ships);
-            SpawnMultidecksShips(field, ships, numOfThisDecksShips);
+            //SpawnMultidecksShips(field, ships, numOfThisDecksShips);
         }
 
         private static bool CheckShipBoundary(char[,] field, List<(int x, int y)> pre_coords)
@@ -262,12 +262,12 @@ namespace SeaBattle_2023
             }
         }
 
-        private static void SpawnMultidecksShips(char[,] field, List<Ship> ships, List<int> numOfThisDecksShips)
+        private static void SpawnShips(char[,] field, List<Ship> ships, List<int> numOfThisDecksShips)
         {
-            int ddx = -4;
+            int dd = -6; // Приращение к dx/dy для построения зависимости dd=f(числа кораблей данного типа (из списка numOfThisDecksShips)).
             foreach (var num in numOfThisDecksShips)
             {
-                ddx += 2;
+                dd += 2;
                 for (int i = 0; i < num; i++) // Сколько кораблей заспавнить.
                 {
                     ships.Add(new Ship());
@@ -297,9 +297,9 @@ namespace SeaBattle_2023
                                 x_null = random.Next(0, 10);
                                 pre_decks_coords_list.Add((x_null, y_null));
 
-                                int dx = num + ddx;
+                                int dx = num + dd;
                                 string vector = "";
-                                for (int h = 0; h < num + ddx; h++)
+                                for (int h = 0; h < num + dd; h++)
                                 {
                                     if (x_null + dx < field.GetLength(0) && field[x_null + dx, y_null] == '.' && vector != "left")
                                     {
@@ -319,8 +319,8 @@ namespace SeaBattle_2023
                                 y_null = random.Next(0, 10);
                                 pre_decks_coords_list.Add((x_null, y_null));
 
-                                int dy = num + ddx;
-                                for (int h = 0; h < num + ddx; h++)
+                                int dy = num + dd;
+                                for (int h = 0; h < num + dd; h++)
                                 {
                                     if (y_null + dy < field.GetLength(1) && field[x_null, y_null + dy] == '.')
                                         pre_decks_coords_list.Add((x_null, y_null + dy));
