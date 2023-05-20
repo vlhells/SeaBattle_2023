@@ -137,7 +137,7 @@ namespace SeaBattle_2023
 
         internal void TakeAShot(char[,] field)
         {
-
+            
         }
     }
 }
