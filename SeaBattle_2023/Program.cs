@@ -4,7 +4,7 @@
     {
         static void Main()
         {
-            Logic.GameCycle(out char[,] computersField, out char[,] playersField);
+            Logic.LoadGameCycle(out char[,] computersField, out char[,] playersField);
             Draw(computersField);
             Draw(playersField);
         }
